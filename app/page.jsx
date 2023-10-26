@@ -1,9 +1,13 @@
 import React from "react";
 import TicketCard from "./(components)/TicketCard";
+import { headers } from 'next/headers';
 
 const getTickets = async () => {
+  const headersList = headers();
+  const fullUrl = headersList.get('referer') || "";
+
   try {
-    const res = await fetch("/api/Tickets", {
+    const res = await fetch(`${fullUrl}/api/Tickets`, {
       cache: "no-store",
     });
 
