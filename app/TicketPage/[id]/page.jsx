@@ -2,7 +2,7 @@ import EditTicketForm from "@/app/(components)/EditTicketForm";
 
 const getTicketById = async (id) => {
   try {
-    const res = await fetch(`https://${process.env.NEXT_PUBLIC_VERCEL_URL}/api/Tickets/${id}`, {
+    const res = await fetch(`http://localhost:3000/api/Tickets/${id}`, {
       cache: "no-store",
     });
 
