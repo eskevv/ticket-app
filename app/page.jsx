@@ -4,10 +4,9 @@ import { headers } from 'next/headers';
 
 const getTickets = async () => {
   const headersList = headers();
-  const fullUrl = headersList.get('referer') || "";
 
   try {
-    const res = await fetch(`${fullUrl}/api/Tickets`, {
+    const res = await fetch(`${headersList.get("x-forwarded-host") || ""}/api/Tickets`, {
       cache: "no-store",
     });
 
