@@ -1,31 +1,20 @@
-import React from "react";
+'use client'
+
+import React, {useEffect, useState} from "react";
 import TicketCard from "./(components)/TicketCard";
-import { headers } from 'next/headers';
 
-const getTickets = async () => {
-  const headersList = headers();
+const Dashboard = () => {
+  const [{tickets}, setTickets] = useState([]);
+  useEffect(() => {
+    fetch("/api/Tickets", {cache: "no-store",})
+      .then(res => res.json())
+      .then(data => setTickets(data))
+      .catch((error) => {
+        console.log(`Error loading topics: ${error}`);
+      });
+  }, []);
 
-  try {
-    const res = await fetch(`${headersList.get("x-forwarded-host") || ""}/api/Tickets`, {
-      cache: "no-store",
-    });
-
-    if (!res.ok) {
-      throw new Error("Failed to fetch topics");
-    }
-
-    return res.json();
-  } catch (error) {
-    console.log("Error loading topics: ", error);
-  }
-};
-
-const Dashboard = async () => {
-  const { tickets } = await getTickets();
-
-  const uniqueCategories = [
-    ...new Set(tickets?.map(({ category }) => category)),
-  ];
+  const uniqueCategories = [...new Set(tickets?.map(({category}) => category))];
 
   return (
     <div className="p-5">
@@ -38,11 +27,7 @@ const Dashboard = async () => {
                 {tickets
                   .filter((ticket) => ticket.category === uniqueCategory)
                   .map((filteredTicket, _index) => (
-                    <TicketCard
-                      id={_index}
-                      key={_index}
-                      ticket={filteredTicket}
-                    />
+                    <TicketCard id={_index} key={_index} ticket={filteredTicket}/>
                   ))}
               </div>
             </div>
